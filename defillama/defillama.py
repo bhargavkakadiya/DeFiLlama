@@ -33,8 +33,9 @@ class DefiLlama:
         :return: dict/list: JSON response
         """
         url = BASE_URL + endpoint
-        response = self.session.request(method, url, params=params,
-                                 data=data, timeout=30)
+        response = self.session.request(
+            method, url, params=params, data=data, timeout=30
+        )
         return response.json()
 
     def _get(self, endpoint, params=None):
@@ -44,7 +45,7 @@ class DefiLlama:
         :param params: HTTP request parameters
         :return:
         """
-        return self._send_message('GET', endpoint, params=params)
+        return self._send_message("GET", endpoint, params=params)
 
     def get_all_protocols(self):
         """
@@ -54,7 +55,7 @@ class DefiLlama:
 
         :return: JSON response
         """
-        path = '/protocols'
+        path = "/protocols"
 
         return self._get(path)
 
@@ -68,7 +69,7 @@ class DefiLlama:
             This can be obtained from the /protocols endpoint
         :return: JSON response
         """
-        path = f'/protocol/{name}'
+        path = f"/protocol/{name}"
 
         return self._get(path)
 
@@ -79,7 +80,7 @@ class DefiLlama:
 
         :return: JSON response
         """
-        path = '/charts'
+        path = "/charts"
 
         return self._get(path)
 
@@ -93,17 +94,56 @@ class DefiLlama:
             This can be obtained from the /protocols endpoint
         :return: JSON response
         """
-        path = f'/tvl/{name}'
+        path = f"/tvl/{name}"
 
         return self._get(path)
-    
+
     def get_chains(self):
         """
         Returns list of current TVL of all chains.
         Endpoint: GET /chain
-        
+
         :return: JSON response
         """
         path = f'/chains/'
+
+        return self._get(path)
+
+    # --------- Fees and Revenue --------- #
+    def get_all_fees(self):
+        """
+        Returns: List all dexs along with summaries of their volumes and dataType history data
+        Endpoint: GET /overview/fees
+
+        :return: JSON response
+        """
+        path = "/overview/fees"
+
+        return self._get(path)
+
+    def get_chain_fees(self, chain):
+        """
+        Returns: List all protocols along with summaries of their fees and revenue and dataType history data by chain
+        Endpoint: GET /overview/fees/{name}
+
+        :param: chain : ID of the chain to get (eg: ethereum, binance-smart-chain...).
+            list of all supported chains can be found under allChains attribute in /overview/fees response
+        :return: JSON response
+
+        """
+        path = f"/overview/fees/{chain}"
+
+        return self._get(path)
+
+    def get_protocol_fees(self, protocol):
+        """
+        Returns: Get summary of protocol fees and revenue with historical data
+        Endpoint: GET /summary/fees/{protocol}
+
+        :param: protocol : ID of the protocol to get (eg: uniswap, WBTC...).
+        :return: JSON response
+
+        """
+        path = f"/summary/fees/{protocol}"
 
         return self._get(path)
